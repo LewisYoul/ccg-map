@@ -1,28 +1,51 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Map/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Map from './components/Map.vue'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
+  components: { Map },
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  body {
+    margin: 0;
+  }
+  #app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+  }
+  
+  /* ANIMATIONS */
+
+  .flex-1 { flex: 1 }
+  .flex-2 { flex: 2 }
+  .flex-3 { flex: 3 }
+
+  .margin-bottom {
+    margin-bottom: 6px;
+  }
+  .slide-enter-active {
+    animation: menu-slide .5s;
+  }
+  .slide-leave-active {
+    animation: menu-slide .5s reverse;
+  }
+  @keyframes menu-slide {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
 </style>
