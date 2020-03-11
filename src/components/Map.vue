@@ -150,6 +150,22 @@ export default {
               { source: 'ccgs', sourceLayer: self.sourceLayer, id: self.hoveredStateId },
               { hover: false }
             );
+
+            popup.remove()
+          })
+
+          var popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false
+          });
+
+          self.map.on('mousemove', 'fill', (e) => {
+            const ccgName = self.map.queryRenderedFeatures(e.point)[0].properties.ccg18nm
+
+            popup
+              .setLngLat(e.lngLat)
+              .setHTML(ccgName)
+              .addTo(self.map);
           })
         })
     });
