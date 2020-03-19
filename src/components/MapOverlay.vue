@@ -1,5 +1,5 @@
 <template>
-  <div class="map-overlay--container">
+  <div :class="classFor">
     <div class="map-overlay--wrapper">
       <span class="map-overlay--title">{{ ccg.ccg18nm }}</span>
     </div>
@@ -32,24 +32,102 @@ export default {
 
   props: {
     ccg: { type: Object, required: true },
+    position: { type: Number, required: true }
+  },
+
+  data() {
+    return {
+      activationStatus: 'active'
+    }
+  },
+
+  computed: {
+    classFor() {
+      return `map-overlay--container-${this.activationStatus}-${this.position}`
+    }
   },
 
   methods: {
+    activate() {
+      console.log('pos', this.position)
+      this.activationStatus = 'active';
+    },
+
+    deactivate() {
+      console.log('pos', this.position)
+      this.activationStatus = 'inactive';
+    },
+
     close() {
-      this.$emit('closed')
+      console.log('id', this.ccg.id)
+      this.$emit('closed', this.ccg.id)
     }
   }
 }
 
-
 </script>
 
 <style scoped>
-  .map-overlay--container {
+  .map-overlay--container-active-1 {
     position: fixed;
     z-index: 1;
     left: 0;
-    top: 35%;
+    bottom: 50px;
+    /* height: 340px; */
+    width: 200px;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  .map-overlay--container-active-2 {
+    position: fixed;
+    z-index: 2;
+    left: 200px;
+    bottom: 50px;
+    /* height: 340px; */
+    width: 200px;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  .map-overlay--container-active-3 {
+    position: fixed;
+    z-index: 3;
+    left: 400px;
+    bottom: 50px;
+    /* height: 340px; */
+    width: 200px;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  .map-overlay--container-inactive-1 {
+    position: fixed;
+    z-index: 3;
+    left: 0;
+    bottom: 50px;
+    /* height: 340px; */
+    width: 200px;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  .map-overlay--container-inactive-2 {
+    position: fixed;
+    z-index: 2;
+    left: 10px;
+    bottom: 50px;
+    /* height: 340px; */
+    width: 200px;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  .map-overlay--container-inactive-3 {
+    position: fixed;
+    z-index: 1;
+    left: 20px;
+    bottom: 50px;
     /* height: 340px; */
     width: 200px;
     background-color: white;

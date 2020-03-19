@@ -1,23 +1,17 @@
 <template>
   <div id='map'>
-    <transition name="slide">
-      <MapOverlay
-        @closed="unselectCcg"
-        v-if="computedCcg"
-        :ccg="computedCcg"
-      />
-    </transition>
+    <MapOverlayContainer @unselectCcg="unselectCcg" :ccgs="ccgs"/>
   </div>
 </template>
 
 <script>
 import mapboxgl from 'mapbox-gl';
-import MapOverlay from './MapOverlay.vue'
+import MapOverlayContainer from './MapOverlayContainer.vue'
 
 export default {
   name: 'Map',
 
-  components: { MapOverlay },
+  components: { MapOverlayContainer },
 
   data() {
     return {
@@ -26,6 +20,7 @@ export default {
       hoveredStateId: undefined,
       clickedStateId: undefined,
       sourceLayer: 'ccgs',
+      ccgs: []
     }
   },
 
@@ -37,12 +32,14 @@ export default {
   },
 
   methods: {
-    unselectCcg() {
+    unselectCcg(id) {
+      console.log('id', id)
       this.map.setFeatureState(
-        { source: 'ccgs', sourceLayer: this.sourceLayer, id: this.clickedStateId },
+        { source: 'ccgs', sourceLayer: this.sourceLayer, id: id },
         { clicked: false }
       );
 
+      this.ccgs = this.ccgs.filter(ccg => ccg.id !== id);
       this.selectedCcg = undefined;
       this.clickedStateId = undefined;
     }
@@ -129,20 +126,20 @@ export default {
               );
             }
 
-            const ccg = e.features[0].properties;
+            const ccg = Object.assign(e.features[0].properties, { id: e.features[0].id });
 
-            if (!(self.clickedStateId == e.features[0].id)) {
-              self.clickedStateId = e.features[0].id;
+            console.log('ccg', ccg)
 
-              self.selectedCcg = ccg;
+            if (!(self.clickedStateId == e.features[0].id) && self.ccgs.length < 3) {
+
+              self.ccgs.push(ccg);
 
               self.map.setFeatureState(
                 { source: 'ccgs', sourceLayer: self.sourceLayer, id: self.clickedStateId },
                 { clicked: true }
               );
             } else {
-              self.selectedCcg = undefined;
-              self.clickedStateId = undefined;
+              self.ccgs = self.ccgs.filter(el => ccg.objectid !== el.objectid);
             }
           })
 
