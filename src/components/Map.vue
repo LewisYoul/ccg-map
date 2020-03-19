@@ -1,12 +1,12 @@
 <template>
   <div id='map'>
-  <transition name="slide">
-    <MapOverlay
-      @closed="unselectCcg"
-      v-if="computedCcg"
-      :ccg="computedCcg"
-    />
-  </transition>
+    <transition name="slide">
+      <MapOverlay
+        @closed="unselectCcg"
+        v-if="computedCcg"
+        :ccg="computedCcg"
+      />
+    </transition>
   </div>
 </template>
 
@@ -180,10 +180,13 @@ export default {
   } */
 
   #map {
-    position:absolute;
-    top:0; bottom:0; left: 0; right: 0; width:100%; height: 100%;
+    position: absolute;
+    top: 80px;
+    bottom:0;
+    left: 0;
+    right: 0;
     width: 100%;
-    height: 100%;
+    z-index: 1;
   }
 
   .mapboxgl-popup {

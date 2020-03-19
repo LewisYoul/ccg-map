@@ -1,15 +1,17 @@
 <template>
   <div id="app">
+    <Topbar/>
     <Map/>
   </div>
 </template>
 
 <script>
 import Map from './components/Map.vue'
+import Topbar from './components/Topbar.vue'
 
 export default {
   name: 'App',
-  components: { Map },
+  components: { Map, Topbar },
 }
 </script>
 
@@ -18,11 +20,13 @@ export default {
     margin: 0;
   }
   #app {
+    position: relative;
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
+    height: 100vh;
   }
   
   /* ANIMATIONS */
