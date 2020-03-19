@@ -68,8 +68,6 @@ export default {
           'generateId': true
         });
 
-        // console.log(map.getStyle().sources)
-
         self.map.addLayer({
           'id': 'fill',
           'type': 'fill',
@@ -78,14 +76,17 @@ export default {
           'paint': {
             'fill-color': [
                 'case',
-                ['boolean',['feature-state', 'clicked'], false],
-                'pink', // if selected true, paint in blue
-                '#64bdbb' // else paint in gray
+                ['boolean', ['feature-state', 'clicked'], false], 'pink',
+                [ '==', ['get', 'cycles'], "0"], "lightgrey",
+                [ '==', ['get', 'cycles'], "1"], "lightblue",
+                [ '==', ['get', 'cycles'], "2"], "cadetblue",
+                [ '==', ['get', 'cycles'], "3"], "steelblue",
+                'aliceblue'
             ],
             'fill-opacity': [
               'case',
               ['boolean', ['feature-state', 'hover'], false],
-              1,
+              0.9,
               0.5
             ]
           },
