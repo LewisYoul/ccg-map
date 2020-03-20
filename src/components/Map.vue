@@ -16,33 +16,32 @@ export default {
   data() {
     return {
       map: undefined,
-      selectedCcg: undefined,
       hoveredStateId: undefined,
-      clickedStateId: undefined,
       sourceLayer: 'ccgs',
       ccgs: []
     }
   },
 
-  computed: {
-    computedCcg: function() {
-      console.log(this.selectedCcg)
-      return this.selectedCcg;
-    }
-  },
-
   methods: {
     unselectCcg(id) {
-      console.log('id', id)
+      this.ccgs = this.ccgs.filter(ccg => ccg.id !== id);
+      this.setFeatureState(id, { clicked: false })
+    },
+
+    setFeatureState(id, state) {
       this.map.setFeatureState(
         { source: 'ccgs', sourceLayer: this.sourceLayer, id: id },
-        { clicked: false }
+        state
       );
+    },
 
-      this.ccgs = this.ccgs.filter(ccg => ccg.id !== id);
-      this.selectedCcg = undefined;
-      this.clickedStateId = undefined;
-    }
+    ccgIdsInclude(ccgId) {
+      return this.ccgs.filter(ccg => ccgId == ccg.id).length > 0;
+    },
+
+    ccgIdsExclude(ccgId) {
+      return !this.ccgIdsInclude(ccgId);
+    },
   },
 
   created() {
@@ -101,74 +100,48 @@ export default {
           'filter': ['==', '$type', 'Polygon']
         });
 
+        let popup = new mapboxgl.Popup({
+          closeButton: false,
+          closeOnClick: false
+        });
+
         self.map.on('mousemove', 'fill', function(e) {
+          const ccgName = self.map.queryRenderedFeatures(e.point)[0].properties.ccg18nm
+
+          popup
+            .setLngLat(e.lngLat)
+            .setHTML(ccgName)
+            .addTo(self.map);
+
           self.map.getCanvas().style.cursor = 'pointer';
           if (e.features.length > 0) {
             if (self.hoveredStateId) {
-              self.map.setFeatureState(
-                { source: 'ccgs', sourceLayer: self.sourceLayer, id: self.hoveredStateId },
-                { hover: false }
-              );
+              self.setFeatureState(self.hoveredStateId, { hover: false })
             }
             self.hoveredStateId = e.features[0].id;
-            self.map.setFeatureState(
-              { source: 'ccgs', sourceLayer: self.sourceLayer, id: self.hoveredStateId },
-              { hover: true }
-            );
+            self.setFeatureState(self.hoveredStateId, { hover: true })
           }
         });
 
           self.map.on('click', 'fill', (e) => {
-            if (self.clickedStateId) {
-              self.map.setFeatureState(
-                { source: 'ccgs', sourceLayer: self.sourceLayer, id: self.clickedStateId },
-                { clicked: false }
-              );
-            }
+            const ccg = Object.assign({}, e.features[0].properties, { id: e.features[0].id });
 
-            const ccg = Object.assign(e.features[0].properties, { id: e.features[0].id });
-
-            console.log('inc', self.ccgs.filter(el => ccg.id == el.id).length > 0)
-
-            if (self.ccgs.filter(el => ccg.id == el.id).length < 1 && self.ccgs.length < 3) {
+            if (self.ccgIdsExclude(ccg.id) && self.ccgs.length < 3) {
 
               self.ccgs.push(ccg);
 
-              self.map.setFeatureState(
-                { source: 'ccgs', sourceLayer: self.sourceLayer, id: e.features[0].id },
-                { clicked: true }
-              );
+              self.setFeatureState(ccg.id, { clicked: true })
             } else {
               self.ccgs = self.ccgs.filter(el => ccg.id !== el.id);
 
-              self.map.setFeatureState(
-                { source: 'ccgs', sourceLayer: self.sourceLayer, id: ccg.id },
-                { clicked: false }
-              );
+              self.setFeatureState(ccg.id, { clicked: false })
             }
           })
 
           self.map.on('mouseleave', 'fill', () => {
-            self.map.setFeatureState(
-              { source: 'ccgs', sourceLayer: self.sourceLayer, id: self.hoveredStateId },
-              { hover: false }
-            );
-
+            self.map.getCanvas().style.cursor = '';
+            self.setFeatureState(self.hoveredStateId, { hover: false })
             popup.remove()
-          })
-
-          var popup = new mapboxgl.Popup({
-            closeButton: false,
-            closeOnClick: false
-          });
-
-          self.map.on('mousemove', 'fill', (e) => {
-            const ccgName = self.map.queryRenderedFeatures(e.point)[0].properties.ccg18nm
-
-            popup
-              .setLngLat(e.lngLat)
-              .setHTML(ccgName)
-              .addTo(self.map);
           })
         })
     });
@@ -177,11 +150,6 @@ export default {
 </script>
 
 <style>
-  /* .map-container {
-    height: 100vh;
-    width: 100vw;
-  } */
-
   #map {
     position: absolute;
     top: 80px;

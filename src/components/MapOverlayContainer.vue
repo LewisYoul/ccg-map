@@ -1,10 +1,13 @@
 <template>
   <div @mouseenter="activate" @mouseleave="deactivate" class="container">
-    <MapOverlay v-for="(ccg, index) in ccgs" :key="index"
-      @closed="unselectCcg"
-      :ccg="ccg"
-      :position="index + 1"
-    />
+    <transition-group name="slide">
+      <MapOverlay v-for="(ccg, index) in ccgs" :key="index"
+        @closed="unselectCcg"
+        :ccg="ccg"
+        :position="index + 1"
+        ref="ccgOverlays"
+      />
+    </transition-group>
   </div>
 </template>
 
@@ -31,12 +34,12 @@ export default {
     activate() {
       console.log(this.$children)
       console.log('activate')
-      this.$children.map(child => child.activate())
+      this.$refs.ccgOverlays.map(child => child.activate())
     },
 
     deactivate() {
       console.log('deactivate')
-      this.$children.map(child => child.deactivate())
+      this.$refs.ccgOverlays.map(child => child.deactivate())
     },
 
     unselectCcg(id) {

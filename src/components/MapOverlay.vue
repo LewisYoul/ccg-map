@@ -36,6 +36,7 @@ export default {
   },
 
   data() {
+    // Not currently used
     return {
       activationStatus: 'active'
     }
@@ -43,23 +44,21 @@ export default {
 
   computed: {
     classFor() {
-      return `map-overlay--container-${this.activationStatus}-${this.position}`
+      return `map-overlay--container-${this.position}`
     }
   },
 
   methods: {
+    // Not currently used
     activate() {
-      console.log('pos', this.position)
       this.activationStatus = 'active';
     },
-
+    // Not currently used
     deactivate() {
-      console.log('pos', this.position)
       this.activationStatus = 'inactive';
     },
 
     close() {
-      console.log('id', this.ccg.id)
       this.$emit('closed', this.ccg.id)
     }
   }
@@ -68,70 +67,37 @@ export default {
 </script>
 
 <style scoped>
-  .map-overlay--container-active-1 {
+  .map-overlay--container-1 {
     position: fixed;
-    z-index: 1;
+    z-index: 3;
     left: 0;
     bottom: 50px;
-    /* height: 340px; */
     width: 200px;
     background-color: white;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    height: 450px;
   }
 
-  .map-overlay--container-active-2 {
+  .map-overlay--container-2 {
     position: fixed;
     z-index: 2;
     left: 200px;
     bottom: 50px;
-    /* height: 340px; */
     width: 200px;
     background-color: white;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    height: 450px;
   }
 
-  .map-overlay--container-active-3 {
-    position: fixed;
-    z-index: 3;
-    left: 400px;
-    bottom: 50px;
-    /* height: 340px; */
-    width: 200px;
-    background-color: white;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  }
-
-  .map-overlay--container-inactive-1 {
-    position: fixed;
-    z-index: 3;
-    left: 0;
-    bottom: 50px;
-    /* height: 340px; */
-    width: 200px;
-    background-color: white;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  }
-
-  .map-overlay--container-inactive-2 {
-    position: fixed;
-    z-index: 2;
-    left: 10px;
-    bottom: 50px;
-    /* height: 340px; */
-    width: 200px;
-    background-color: white;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  }
-
-  .map-overlay--container-inactive-3 {
+  .map-overlay--container-3 {
     position: fixed;
     z-index: 1;
-    left: 20px;
+    left: 400px;
     bottom: 50px;
-    /* height: 340px; */
     width: 200px;
     background-color: white;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    height: 450px;
   }
 
   .map-overlay--wrapper {
