@@ -128,18 +128,23 @@ export default {
 
             const ccg = Object.assign(e.features[0].properties, { id: e.features[0].id });
 
-            console.log('ccg', ccg)
+            console.log('inc', self.ccgs.filter(el => ccg.id == el.id).length > 0)
 
-            if (!(self.clickedStateId == e.features[0].id) && self.ccgs.length < 3) {
+            if (self.ccgs.filter(el => ccg.id == el.id).length < 1 && self.ccgs.length < 3) {
 
               self.ccgs.push(ccg);
 
               self.map.setFeatureState(
-                { source: 'ccgs', sourceLayer: self.sourceLayer, id: self.clickedStateId },
+                { source: 'ccgs', sourceLayer: self.sourceLayer, id: e.features[0].id },
                 { clicked: true }
               );
             } else {
-              self.ccgs = self.ccgs.filter(el => ccg.objectid !== el.objectid);
+              self.ccgs = self.ccgs.filter(el => ccg.id !== el.id);
+
+              self.map.setFeatureState(
+                { source: 'ccgs', sourceLayer: self.sourceLayer, id: ccg.id },
+                { clicked: false }
+              );
             }
           })
 
